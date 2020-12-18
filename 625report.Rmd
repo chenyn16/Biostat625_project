@@ -82,6 +82,8 @@ The model we used in our project consists of an input layer, an embedding layer,
 We split the dataset into 8:2 for training and testing.  First see the outputs of models using structured and textual variables separately. Then we combine all variables and fit a hybrid deep learning model by concatenating MLP and LSTM. For evaluation, we would use ROC curves to demonstrate the results.
 
 ## Structured inputs and MLP
+For the training part, we use 10 epochs and set the batch_size as 32. And the best AUC we get is 0.778 in the validation set. Addtionally, we also use other metrics. The accuracy is 0.718, the precision is 0.719 and the recall is 0.716.   
+Use the best model in the training part, we get a 0.78 AUC in our testing set. 
 ![Metrics of training MLP model](./model2_metrics.jpeg)
 
 
@@ -89,12 +91,16 @@ We split the dataset into 8:2 for training and testing.  First see the outputs o
 
 
 ## Text inputs and LSTM
+Before training, we need to perform data cleaning. To clean the text data, we remove urls, punctuations, and single letter. Then we remove stop-words - those commonly used words in English such as ”the” ”that” ”is” ”are” that do not construct meaning of the sentence. Finally, we lowercase all letters and remove multiple spaces.
+As for the training part, we also use 10 epochs and set the batch_size as 64. In the validation set, the best AUC we get is 0.851. In addtion to this, the accuracy is 0.771, the precision is 0.770 and the recall is 0.771.   
+In the testing set, we get a 0.8 AUC using the best trained model.  
 ![Metrics of training LSTM model](./model1_metrics.jpeg)
 
 
 ![ROC of LSTM model](./model1_test_roc.jpeg)
 
 ## All inputs and hybrid model
+We combine all variables finally to see the results. In the training part, we achieve the auc of 0.856, accuracy of 0.776, precision of 0.776 and recall of 0.776 in the validation set. In the test set, we obtain a 0.865 auc. The performance of hybrid model exceeds the traditional MLP model and the LSTM model.
 ![Metrics of training hybrid model](./model3_metrics.jpeg)
 
 
