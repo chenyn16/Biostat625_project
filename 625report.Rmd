@@ -1,0 +1,109 @@
+---
+title: "Predicting the need for medical imaging on patients’ information"
+author: "Rongqian Zhang, Yinuo Chen, Keyu Chen"
+date: "December 18, 2020"
+fontsize: 11pt
+geometry: "left=2cm,right=2cm,top=2cm,bottom=2cm"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+  github:
+    number_sections: yes
+    toc: yes
+  prettydoc::html_pretty:
+    css: styles.css
+    highlight: github
+    number_sections: yes
+    theme: "architect"
+    toc: yes
+  pdf_document:
+    latex_engine: xelatex
+    number_sections: yes
+    toc: no
+  rmarkdown::html_vignette:
+    number_sections: yes
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,message = FALSE,warning = FALSE)
+```
+
+
+
+# Introduction
+
+In this project, we will use the National Hospital Ambulatory Medical Care Survey (NHAMCS) dataset (2012 - 2016) from the Centers for Disease Control and Prevention official website. Since 1992, the NHAMCS has been conducted every year to collect data on the utilization and provision of ambulatory care services in hospital emergency and outpatient departments. Data are collected including some basic characteristics of patients (such as age, gender, race, and ethnicity), as well as data on initial vital signs (such as patient's temperature, heart rate, systolic blood pressure, pulse oximetry, and so on). In addition, we have a text variable that tells us the reasons for visits and possible causes of disease for each observation. Given these information, we would like to predict whether patients need any medical imaging (including X-ray and CT scan). In this way, doctors are provided with a reference about medical imaging. Hopefully, it could help the novice doctor to make decision about medical imaging or not and arrange medical resources better.   
+To predict whether patients need any medical imaging, we would build several classification models. The methods we would use are multilayer perceptron, GloVe and LSTM.
+
+
+
+# Datasest
+In our project, rather than use all of the data since 1992, we would like to use the data from 2012 to 2016. After data cleaning, we have 27,665 observations in our dataset and around 30.34% of these patients need medical imaging to help the disease diagnosis. So the sample number of need medical imaging over the sample number of not need is roughly 1 over 2.3. It is unbalanced but still tolerable.      
+We have two kinds of input data. One type is structure data. Structure data are all numeric or factors, including patient characteristics(age, sex, race, and ethnicity, and so on) and visiting characteristics(temperature, heart rate, systolic blood pressure, pulse oximetry, and so on). For those variables that are factors, we use one-hot embedding to encode them.  From the distribution of some variables, it can been seen that they are quite similar in two groups so that we could not find an apparent tendency. Therefore, a relatively complex model would be more appropriate than a simple model like logistic regression. Take age and painscale as examples.
+
+![The distribution of AGE in two groups](H:/Personal/BIOSTAT625/Project/deep learning project/AGE_ANYIMAGE.jpeg)
+
+
+![The distribution of PAINSCALE in two groups](H:/Personal/BIOSTAT625/Project/deep learning project/PAINSCALE_ANYIMAGE.jpeg)
+
+
+Another type of data is text data. We have reasons for visit and possible causes of disease. For two kind of text variables, we use word clouds to see the frequent words and compare the word usage in two groups.
+
+![The word cloud of reasons for visit](H:/Personal/BIOSTAT625/Project/deep learning project/RFV_cloud.jpg)
+
+![The word cloud of possible causes](H:/Personal/BIOSTAT625/Project/deep learning project/Cause_cloud.jpg)
+
+![Compare word usage of reasons for visit](H:/Personal/BIOSTAT625/Project/deep learning project/RFV_odds.png)
+
+![Compare word usage of possible causes](H:/Personal/BIOSTAT625/Project/deep learning project/Cause_odds.png)
+
+
+From the plots above, we have a rough understanding of the text variables. For the reason of visiting, the top three most common words are pain, fever, and sore. For the possible causes of disease, the top three most common words are NA, fall and activ. NA means that doctors could not give a explicit answer. Besides, we can know that text inputs are different in two groups. So text inputs would be important variables to predict whether patients need medical imaging or not.
+
+# Methodology
+
+We would use different methods for different types of data. For the structure data, we would use multilayer perception, namely a subset of deep neural networks to do classification. For the text data, we need to numerically represent the text data. Here we apply one of the most commonly-used techniques, GloVe on text input. After getting the word-embedding representation, we would like to use LSTM neutral network model for classification.
+
+## Multilayer perceptron
+Here we utilize a relatively simple multilayer perceptron model on the structure data. The structure of our model is an input layer, followed by two dense layer, finally an output dense layer with the output size of two. There are 7,298 parameters in this model and all of them are trainable. 
+
+## Word embedding - GloVe
+The simplest word embedding methos is the Bag of Words method, which just split sentences into every single word and get a 'dictionary'. Then it uses one-hot encoding to tell whether the word appears or not. But this kind of method does not show the relationship of words. GloVe is a method that represents one-hot encodings of words into dense vectors which essentially based on one idea: similar word will appear in similar sentence structure. Rather than treat every word as an unique and independent word, GloVe takes the semantic similarity into consideration and uses the co-occurance of words to show word similarity.
+
+## Long short-term memory (LSTM)
+
+Long Short-Term Memory networks are a type of recurrent neural network capable of learning order dependence in sequence prediction problems. Thus, it is widely used in natural language processing problem. An LSTM layer consists of a set of recurrently connected blocks, namely memory blocks. Each memory block contains one or more recurrently connected memory cells and three multiplicative units (the input, output and forget gates).   
+The model we used in our project consists of an input layer, an embedding layer, a LSTM layer and a dense output layer. So there are 158,556 parameters, 91,906 of them are trainable while 66,650 are non-trainable parameters.
+
+
+# Results
+We split the dataset into 8:2 for training and testing.  First see the outputs of models using structured and textual variables separately. Then we combine all variables and fit a hybrid deep learning model by concatenating MLP and LSTM. For evaluation, we would use ROC curves to demonstrate the results.
+
+## Structured inputs and MLP
+![Metrics of training MLP model](H:/Personal/BIOSTAT625/Project/deep learning project/model2_metrics.jpeg)
+
+
+![ROC of MLP model](H:/Personal/BIOSTAT625/Project/deep learning project/model2_test_roc.jpeg)
+
+
+## Text inputs and LSTM
+![Metrics of training LSTM model](H:/Personal/BIOSTAT625/Project/deep learning project/model1_metrics.jpeg)
+
+
+![ROC of LSTM model](H:/Personal/BIOSTAT625/Project/deep learning project/model1_test_roc.jpeg)
+
+## All inputs and hybrid model
+![Metrics of training hybrid model](H:/Personal/BIOSTAT625/Project/deep learning project/model3_metrics.jpeg)
+
+
+![ROC of hybrid model](H:/Personal/BIOSTAT625/Project/deep learning project/model3_test_roc.jpeg)
+
+
+# Discussion
+For further improvement, we consider using Bert, a state-of-art method to replace GloVe embedding. Besides, we can also try other algorithms, such as XGBoost, LightGBM and Random Forest.
+
+# Sources and References
+1.	Gers, Felix A., Jürgen Schmidhuber, and Fred Cummins. "Learning to forget: Continual prediction with LSTM." (1999): 850-855.
+2.	Graves, Alex, and Jürgen Schmidhuber. "Framewise phoneme classification with bidirectional LSTM and other neural network architectures." Neural networks 18.5-6 (2005): 602-610.
