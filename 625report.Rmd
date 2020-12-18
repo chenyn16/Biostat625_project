@@ -43,21 +43,21 @@ To predict whether patients need any medical imaging, we would build several cla
 In our project, rather than use all of the data since 1992, we would like to use the data from 2012 to 2016. After data cleaning, we have 27,665 observations in our dataset and around 30.34% of these patients need medical imaging to help the disease diagnosis. So the sample number of need medical imaging over the sample number of not need is roughly 1 over 2.3. It is unbalanced but still tolerable.      
 We have two kinds of input data. One type is structure data. Structure data are all numeric or factors, including patient characteristics(age, sex, race, and ethnicity, and so on) and visiting characteristics(temperature, heart rate, systolic blood pressure, pulse oximetry, and so on). For those variables that are factors, we use one-hot embedding to encode them.  From the distribution of some variables, it can been seen that they are quite similar in two groups so that we could not find an apparent tendency. Therefore, a relatively complex model would be more appropriate than a simple model like logistic regression. Take age and painscale as examples.
 
-![The distribution of AGE in two groups](H:/Personal/BIOSTAT625/Project/deep learning project/AGE_ANYIMAGE.jpeg)
+![The distribution of AGE in two groups](./AGE_ANYIMAGE.jpeg)
 
 
-![The distribution of PAINSCALE in two groups](H:/Personal/BIOSTAT625/Project/deep learning project/PAINSCALE_ANYIMAGE.jpeg)
+![The distribution of PAINSCALE in two groups](./PAINSCALE_ANYIMAGE.jpeg)
 
 
 Another type of data is text data. We have reasons for visit and possible causes of disease. For two kind of text variables, we use word clouds to see the frequent words and compare the word usage in two groups.
 
-![The word cloud of reasons for visit](H:/Personal/BIOSTAT625/Project/deep learning project/RFV_cloud.jpg)
+![The word cloud of reasons for visit](./RFV_cloud.jpg)
 
-![The word cloud of possible causes](H:/Personal/BIOSTAT625/Project/deep learning project/Cause_cloud.jpg)
+![The word cloud of possible causes](./Cause_cloud.jpg)
 
-![Compare word usage of reasons for visit](H:/Personal/BIOSTAT625/Project/deep learning project/RFV_odds.png)
+![Compare word usage of reasons for visit](./RFV_odds.png)
 
-![Compare word usage of possible causes](H:/Personal/BIOSTAT625/Project/deep learning project/Cause_odds.png)
+![Compare word usage of possible causes](./Cause_odds.png)
 
 
 From the plots above, we have a rough understanding of the text variables. For the reason of visiting, the top three most common words are pain, fever, and sore. For the possible causes of disease, the top three most common words are NA, fall and activ. NA means that doctors could not give a explicit answer. Besides, we can know that text inputs are different in two groups. So text inputs would be important variables to predict whether patients need medical imaging or not.
@@ -82,23 +82,23 @@ The model we used in our project consists of an input layer, an embedding layer,
 We split the dataset into 8:2 for training and testing.  First see the outputs of models using structured and textual variables separately. Then we combine all variables and fit a hybrid deep learning model by concatenating MLP and LSTM. For evaluation, we would use ROC curves to demonstrate the results.
 
 ## Structured inputs and MLP
-![Metrics of training MLP model](H:/Personal/BIOSTAT625/Project/deep learning project/model2_metrics.jpeg)
+![Metrics of training MLP model](./model2_metrics.jpeg)
 
 
-![ROC of MLP model](H:/Personal/BIOSTAT625/Project/deep learning project/model2_test_roc.jpeg)
+![ROC of MLP model](./model2_test_roc.jpeg)
 
 
 ## Text inputs and LSTM
-![Metrics of training LSTM model](H:/Personal/BIOSTAT625/Project/deep learning project/model1_metrics.jpeg)
+![Metrics of training LSTM model](./model1_metrics.jpeg)
 
 
-![ROC of LSTM model](H:/Personal/BIOSTAT625/Project/deep learning project/model1_test_roc.jpeg)
+![ROC of LSTM model](./model1_test_roc.jpeg)
 
 ## All inputs and hybrid model
-![Metrics of training hybrid model](H:/Personal/BIOSTAT625/Project/deep learning project/model3_metrics.jpeg)
+![Metrics of training hybrid model](./model3_metrics.jpeg)
 
 
-![ROC of hybrid model](H:/Personal/BIOSTAT625/Project/deep learning project/model3_test_roc.jpeg)
+![ROC of hybrid model](./model3_test_roc.jpeg)
 
 
 # Discussion
