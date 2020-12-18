@@ -110,6 +110,10 @@ We combine all variables finally to see the results. In the training part, we ac
 # Discussion
 For further improvement, we consider using Bert, a state-of-art method to replace GloVe embedding. Besides, we can also try other algorithms, such as XGBoost, LightGBM and Random Forest.
 
+
+# Contributions of members
+All three group members make great contributions to this project. Rongqian Zhang is in charge of proposal, data preprocessing, analysis, modeling, and presentation. Yinuo Chen is responsible for data analysis, modeling, proposal, and report writing. Keyu Chen takes charge of data cleaning, modeling, presentation, and report writing.
+
 # Sources and References
 1.	Gers, Felix A., Jürgen Schmidhuber, and Fred Cummins. "Learning to forget: Continual prediction with LSTM." (1999): 850-855.
 2.	Graves, Alex, and Jürgen Schmidhuber. "Framewise phoneme classification with bidirectional LSTM and other neural network architectures." Neural networks 18.5-6 (2005): 602-610.
